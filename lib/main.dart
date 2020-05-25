@@ -1,4 +1,5 @@
 import 'package:FlavorApp/resources/flavors.dart';
+import 'package:FlavorApp/screens/flavor_screen.dart';
 import 'package:FlavorApp/screens/mainlist.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,9 +41,27 @@ Widget _createApp() => FutureBuilder(
     if(snapshot.connectionState == ConnectionState.done) {
       return ChangeNotifierProvider(
         create: (context) => FlavorListProvider(),
-        builder: (context, child) => FlavorList(),
+        builder: (context, child) => Navigator(
+          onGenerateRoute: RouteGenerator.generateR,
+          initialRoute: 'MainList',
+        ),
       );
     }
     return const Center(child: CircularProgressIndicator());
   },
 );
+
+class RouteGenerator {
+  static Route<dynamic> generateR(RouteSettings settings){
+    switch (settings.name) {
+      case 'FlavorScreen':
+        Map<String, dynamic> args = settings.arguments;
+        return MaterialPageRoute(builder: (_) => FlavorScreen(flavor: args['flavor'], index: args['index']));
+        break;
+      case 'MainList':
+        return MaterialPageRoute(builder: (_) => FlavorList());
+      default:
+        return MaterialPageRoute(builder: (_) => Material(child: Text("No Route Defined for ${settings.name}")));
+    }
+  }
+}
