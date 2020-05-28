@@ -25,6 +25,8 @@ dependencies:
     sdk: flutter
   provider: ^4.1.2
   rounded_floating_app_bar: ^0.1.0
+  sticky_headers: ^0.1.8+1
+  flutter_sticky_header: ^0.4.2
 
 
   # The following adds the Cupertino Icons font to your application.

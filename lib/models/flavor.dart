@@ -10,6 +10,7 @@ class Flavor {
 
   final List<dynamic> techniques;
   final List<dynamic> flavorAffinities;
+  final List<dynamic> avoid;
 
   final Map<String, int> ingredients;
 
@@ -23,7 +24,8 @@ class Flavor {
     this.tips,
     this.techniques,
     this.ingredients,
-    this.flavorAffinities
+    this.flavorAffinities,
+    this.avoid
   });
 
   factory Flavor.fromJson(dynamic json) {
@@ -36,6 +38,7 @@ class Flavor {
       function: json['Function'],
       tips: json['Tips'],
       techniques: json['Techniques'],
+      avoid: json['Avoid'],
       ingredients: Map<String, int>.from(json['Ingredients']),
       flavorAffinities: json['FlavorAffinities']
     );

@@ -20,10 +20,13 @@ class FlavorCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                flavor.name,
-                style: Theme.of(context).textTheme.headline6,
-              )
+              Hero(
+                tag: Key("FlavorCardScreen: $index"),
+                child: Text(
+                  flavor.name,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+              ),
             ],
           )
         )
