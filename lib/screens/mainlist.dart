@@ -9,6 +9,11 @@ class FlavorListProvider extends ChangeNotifier {
   static FlavorRepository _repository = FlavorRepository();
 
   List<Flavor> flavors = _repository.getAllFlavors();
+
+  void search(String query) async {
+    flavors = await _repository.filterFlavors(query);
+    notifyListeners();
+  }
 }
 
 class FlavorList extends StatelessWidget {
@@ -23,7 +28,12 @@ class FlavorList extends StatelessWidget {
           : CustomScrollView(
             slivers: [
               RoundedFloatingAppBar(
-                title: const Text("Search"),
+                title: TextField(
+                  decoration: InputDecoration.collapsed(
+                    hintText: "Search"
+                  ),
+                  onChanged: (str) => provider.search(str),
+                ),
                 floating: true,
                 snap: true,
                 elevation: 5.0,

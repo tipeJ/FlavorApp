@@ -21,6 +21,13 @@ class FlavorRepository {
   }
 
   List<Flavor> getAllFlavors() => _flavors;
+
+  Future<List<Flavor>> filterFlavors(String query) {
+    return compute(_filterFlavors, {
+      'flavors' : _flavors,
+      'query'   : query
+    });
+  }
 }
 
 List<Flavor> _parseFlavors(String jsonString){
@@ -28,4 +35,10 @@ List<Flavor> _parseFlavors(String jsonString){
   final data = json.decode(jsonString);
   data['Ingredients'].forEach((ingredient) => list.add(Flavor.fromJson(ingredient)));
   return list;
+}
+
+List<Flavor> _filterFlavors(Map<String, dynamic> args) {
+  List<Flavor> flavors = args['flavors'];
+  String query = args['query'];
+  return flavors.where((element) => element.name.toLowerCase().contains(query.toLowerCase())).toList();
 }
