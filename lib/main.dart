@@ -39,12 +39,9 @@ Widget _createApp() => FutureBuilder(
   future: FlavorRepository().initialize(),
   builder: (context, snapshot) {
     if(snapshot.connectionState == ConnectionState.done) {
-      return ChangeNotifierProvider(
-        create: (context) => FlavorListProvider(),
-        builder: (context, child) => Navigator(
-          onGenerateRoute: RouteGenerator.generateR,
-          initialRoute: 'MainList',
-        ),
+      return Navigator(
+        onGenerateRoute: RouteGenerator.generateR,
+        initialRoute: 'MainList',
       );
     }
     return const Center(child: CircularProgressIndicator());
@@ -56,10 +53,17 @@ class RouteGenerator {
     switch (settings.name) {
       case 'FlavorScreen':
         Map<String, dynamic> args = settings.arguments;
-        return MaterialPageRoute(builder: (_) => FlavorScreen(flavor: args['flavor'], index: args['index']));
+        return MaterialPageRoute(
+          builder: (_) => FlavorScreen(flavor: args['flavor'], index: args['index'])
+        );
         break;
       case 'MainList':
-        return MaterialPageRoute(builder: (_) => FlavorList());
+        return MaterialPageRoute(
+          builder: (_) => ChangeNotifierProvider(
+            create: (context) => FlavorListProvider(),
+            builder: (context, child) => FlavorList(),
+          )
+        );
       default:
         return MaterialPageRoute(builder: (_) => Material(child: Text("No Route Defined for ${settings.name}")));
     }
