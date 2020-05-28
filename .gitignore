@@ -11,7 +11,7 @@
 .svn/
 
 # Assets
-./assets
+.assets/
 
 # IntelliJ related
 *.iml

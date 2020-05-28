@@ -6,6 +6,7 @@ class Flavor {
   final String weight;
   final String volume;
   final String function;
+  final String tips;
 
   final List<dynamic> techniques;
   final List<dynamic> flavorAffinities;
@@ -19,6 +20,7 @@ class Flavor {
     this.weight,
     this.volume,
     this.function,
+    this.tips,
     this.techniques,
     this.ingredients,
     this.flavorAffinities
@@ -32,6 +34,7 @@ class Flavor {
       weight: json['Weight'],
       volume: json['Volume'],
       function: json['Function'],
+      tips: json['Tips'],
       techniques: json['Techniques'],
       ingredients: Map<String, int>.from(json['Ingredients']),
       flavorAffinities: json['FlavorAffinities']
