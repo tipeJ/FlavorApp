@@ -11,7 +11,7 @@
 .svn/
 
 # Assets
-.assets/
+/assets/
 
 # IntelliJ related
 *.iml
@@ -46,4 +46,4 @@ app.*.map.json
 
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
-assets/flavordata.json
+
