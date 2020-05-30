@@ -59,20 +59,22 @@ class _FlavorScreenState extends State<FlavorScreen> {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Container(
-              height: 75.0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  widget.flavor.season.isNotEmpty ? SeasonDescription(widget.flavor.season) : null,
-                  widget.flavor.taste.isNotEmpty ? TasteDescription(widget.flavor.season) : null,
-                  widget.flavor.weight.isNotEmpty ? WeightDescription(widget.flavor.season) : null,
-                  widget.flavor.volume.isNotEmpty ? VolumeDescription(widget.flavor.season) : null,
-                ].nonNulls(),
-              ),
-            ),
-          ),
+          widget.flavor.season.isNotEmpty || widget.flavor.taste.isNotEmpty || widget.flavor.weight.isNotEmpty || widget.flavor.volume.isNotEmpty
+            ? SliverToBoxAdapter(
+                child: Container(
+                  height: 75.0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      widget.flavor.season.isNotEmpty ? SeasonDescription(widget.flavor.season) : null,
+                      widget.flavor.taste.isNotEmpty ? TasteDescription(widget.flavor.taste) : null,
+                      widget.flavor.weight.isNotEmpty ? WeightDescription(widget.flavor.weight) : null,
+                      widget.flavor.volume.isNotEmpty ? VolumeDescription(widget.flavor.volume) : null,
+                    ].nonNulls(),
+                  ),
+                ),
+              )
+            : null,
           SliverList(delegate: SliverChildListDelegate([
             widget.flavor.function.isNotEmpty
               ? Text.rich(TextSpan(
@@ -91,32 +93,34 @@ class _FlavorScreenState extends State<FlavorScreen> {
               ))
               : null,
           ].nonNulls())),
-          SliverStickyHeader(
-            header: Container(
-              height: 60.0,
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              alignment: Alignment.centerLeft,
-              color: Theme.of(context).canvasColor,
-              child: Text(
-                "Recommended Flavors",
-                style: Theme.of(context).textTheme.headline6,
-              ),
-            ),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, i) => Container(
-                      padding: const EdgeInsets.all(5.0),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          left: BorderSide(color: FlavorScreen._getFlavorColor(widget.flavor.ingredients.values.elementAt(i), context), width: 5.0)
-                        )
-                      ),
-                      child: Text(widget.flavor.ingredients.keys.elementAt(i))
-                    ),
-                childCount: widget.flavor.ingredients.length,
-              ),
-            ),
-          ),
+          widget.flavor.ingredients.isNotEmpty
+            ? SliverStickyHeader(
+                header: Container(
+                  height: 60.0,
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  alignment: Alignment.centerLeft,
+                  color: Theme.of(context).canvasColor,
+                  child: Text(
+                    "Recommended Flavors",
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                ),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, i) => Container(
+                          padding: const EdgeInsets.all(5.0),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              left: BorderSide(color: FlavorScreen._getFlavorColor(widget.flavor.ingredients.values.elementAt(i), context), width: 5.0)
+                            )
+                          ),
+                          child: Text(widget.flavor.ingredients.keys.elementAt(i))
+                        ),
+                    childCount: widget.flavor.ingredients.length,
+                  ),
+                ),
+              )
+            : null,
           widget.flavor.avoid != null && widget.flavor.avoid.isNotEmpty
             ? SliverStickyHeader(
                 header: Container(
