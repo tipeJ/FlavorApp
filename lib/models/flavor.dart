@@ -1,4 +1,5 @@
 class Flavor {
+  final int id;
   final String name;
 
   final String season;
@@ -15,6 +16,7 @@ class Flavor {
   final Map<String, int> ingredients;
 
   const Flavor({
+    this.id,
     this.name,
     this.season,
     this.taste,
@@ -30,6 +32,7 @@ class Flavor {
 
   factory Flavor.fromJson(dynamic json) {
     return Flavor(
+      id: json['ID'],
       name: json['Name'],
       season: json['Season'],
       taste: json['Taste'],

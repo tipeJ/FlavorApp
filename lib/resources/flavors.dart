@@ -15,9 +15,10 @@ class FlavorRepository {
 
   List<Flavor> _flavors;
 
-  Future<void> initialize() async {
+  Future<bool> initialize() async {
     final data = await rootBundle.loadString("assets/flavordata.json");
     _flavors = await compute(_parseFlavors, data);
+    return true;
   }
 
   List<Flavor> getAllFlavors() => _flavors;
@@ -28,6 +29,8 @@ class FlavorRepository {
       'query'   : query
     });
   }
+
+  Flavor getFlavor(int id) => _flavors[id];
 }
 
 List<Flavor> _parseFlavors(String jsonString){

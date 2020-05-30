@@ -30,23 +30,90 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: _createApp(),
+      home: FutureBuilder<bool>(
+        future: FlavorRepository().initialize(),
+        builder: (context, snapshot) => snapshot.hasData
+          ? _BottomAppBarWrapper()
+          : const Center(child: CircularProgressIndicator())
+      ),
     );
   }
 }
 
-Widget _createApp() => FutureBuilder(
-  future: FlavorRepository().initialize(),
-  builder: (context, snapshot) {
-    if(snapshot.connectionState == ConnectionState.done) {
-      return Navigator(
-        onGenerateRoute: RouteGenerator.generateR,
-        initialRoute: 'MainList',
-      );
+
+class _BottomAppBarWrapper extends StatefulWidget {
+  _BottomAppBarWrapper({Key key}) : super(key: key);
+
+  @override
+  __BottomAppBarWrapperState createState() => __BottomAppBarWrapperState();
+}
+
+class __BottomAppBarWrapperState extends State<_BottomAppBarWrapper> {
+
+  int _currentPage = 1;
+
+  final _flavorsListScreen = GlobalKey<NavigatorState>();
+
+  Future<bool> _didPopRoute() {
+    if (_currentPage == 1) {
+      return _flavorsListScreen.currentState.maybePop();
     }
-    return const Center(child: CircularProgressIndicator());
-  },
-);
+    return Future.value(false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: _didPopRoute,
+      child: Scaffold(
+        body: IndexedStack(
+          index: _currentPage,
+          children: [
+            Scaffold(
+              appBar: AppBar(title: const Text("Saved")),
+              body: Container(color: Colors.red),
+            ),
+            Navigator(
+              onGenerateRoute: RouteGenerator.generateR,
+              initialRoute: 'MainList',
+            ),
+            Scaffold(
+              appBar: AppBar(title: const Text("Settings")),
+              body: Container(color: Colors.red),
+            ),
+          ],
+          
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentPage,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.collections_bookmark),
+              title: Text("Saved")
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              title: Text("Flavors")
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              title: Text("Settings")
+            )
+          ],
+          onTap: (i) {
+            if (i == _currentPage && i == 1) {
+              _flavorsListScreen.currentState.popUntil((route) => route.isFirst);
+            } else {
+              setState(() {
+                _currentPage = i;
+              });
+            }
+          },
+        ),
+      )
+    );
+  }
+}
 
 class RouteGenerator {
   static Route<dynamic> generateR(RouteSettings settings){

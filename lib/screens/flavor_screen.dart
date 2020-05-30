@@ -33,8 +33,10 @@ enum _FlavorsSortType {
 }
 
 class _FlavorScreenState extends State<FlavorScreen> {
-  _FlavorsSortType _sortType;
   Map<String, int> _flavors;
+
+  _FlavorsSortType _sortType;
+  bool _saved = false;
 
   @override
   void initState() {
@@ -56,8 +58,20 @@ class _FlavorScreenState extends State<FlavorScreen> {
               child: Text(
                 widget.flavor.name,
                 style: Theme.of(context).primaryTextTheme.headline6
-              ),
+              )
             ),
+            actions: [
+              IconButton(
+                icon: Icon(_saved ? Icons.bookmark : Icons.bookmark_border),
+                tooltip: _saved ? "Unsave Flavor" : "Save Flavor",
+                onPressed: () {
+                  setState(() {
+                    _saved = !_saved;
+                  });
+                  print(FlavorRepository().getFlavor(widget.flavor.id).ingredients);
+                }
+              )
+            ],
           ),
           widget.flavor.season.isNotEmpty || widget.flavor.taste.isNotEmpty || widget.flavor.weight.isNotEmpty || widget.flavor.volume.isNotEmpty
             ? SliverToBoxAdapter(
