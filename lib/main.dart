@@ -75,6 +75,7 @@ class __BottomAppBarWrapperState extends State<_BottomAppBarWrapper> {
             ),
             Navigator(
               onGenerateRoute: RouteGenerator.generateR,
+              key: _flavorsListScreen,
               initialRoute: 'MainList',
             ),
             Scaffold(
