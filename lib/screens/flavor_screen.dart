@@ -1,4 +1,5 @@
 import 'package:FlavorApp/models/models.dart';
+import 'package:FlavorApp/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:FlavorApp/resources/resources.dart';
@@ -45,23 +46,51 @@ class _FlavorScreenState extends State<FlavorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Hero(
-          tag: Key("FlavorCardScreen: ${widget.index}"),
-          child: Text(
-            widget.flavor.name,
-            style: Theme.of(context).primaryTextTheme.headline6
-          ),
-        ),
-      ),
       body: CustomScrollView(
         slivers: [
+          SliverAppBar(
+            pinned: true,
+            floating: false,
+            title: Hero(
+              tag: Key("FlavorCardScreen: ${widget.index}"),
+              child: Text(
+                widget.flavor.name,
+                style: Theme.of(context).primaryTextTheme.headline6
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 75.0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  widget.flavor.season.isNotEmpty ? SeasonDescription(widget.flavor.season) : null,
+                  widget.flavor.taste.isNotEmpty ? TasteDescription(widget.flavor.season) : null,
+                  widget.flavor.weight.isNotEmpty ? WeightDescription(widget.flavor.season) : null,
+                  widget.flavor.volume.isNotEmpty ? VolumeDescription(widget.flavor.season) : null,
+                ].nonNulls(),
+              ),
+            ),
+          ),
           SliverList(delegate: SliverChildListDelegate([
-            Text(widget.flavor.season),
-            Text(widget.flavor.taste),
-            Text(widget.flavor.weight),
-            Text(widget.flavor.volume),
-          ])),
+            widget.flavor.function.isNotEmpty
+              ? Text.rich(TextSpan(
+                children: [
+                  TextSpan(text: "Function: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: widget.flavor.function)
+                ]
+              ))
+              : null,
+            widget.flavor.tips.isNotEmpty
+              ? Text.rich(TextSpan(
+                children: [
+                  TextSpan(text: "Tips: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: widget.flavor.tips)
+                ]
+              ))
+              : null,
+          ].nonNulls())),
           SliverStickyHeader(
             header: Container(
               height: 60.0,
