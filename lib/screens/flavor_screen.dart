@@ -12,7 +12,7 @@ class FlavorScreen extends StatefulWidget {
   @override
   _FlavorScreenState createState() => _FlavorScreenState();
 
-  static Color _getFlavorColor(int recommendedValue) {
+  static Color _getFlavorColor(int recommendedValue, BuildContext context) {
     switch (recommendedValue) {
       case 3:
         return Colors.green;
@@ -21,7 +21,7 @@ class FlavorScreen extends StatefulWidget {
       case 1:
         return Colors.blueAccent;
       default:
-        return Colors.blueGrey;
+        return Theme.of(context).canvasColor;
     }
   }
 }
@@ -65,12 +65,12 @@ class _FlavorScreenState extends State<FlavorScreen> {
           SliverStickyHeader(
             header: Container(
               height: 60.0,
-              color: Colors.lightBlue,
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               alignment: Alignment.centerLeft,
-              child: const Text(
+              color: Theme.of(context).canvasColor,
+              child: Text(
                 "Recommended Flavors",
-                style: const TextStyle(color: Colors.white),
+                style: Theme.of(context).textTheme.headline6,
               ),
             ),
             sliver: SliverList(
@@ -79,7 +79,7 @@ class _FlavorScreenState extends State<FlavorScreen> {
                       padding: const EdgeInsets.all(5.0),
                       decoration: BoxDecoration(
                         border: Border(
-                          left: BorderSide(color: FlavorScreen._getFlavorColor(widget.flavor.ingredients.values.elementAt(i)), width: 5.0)
+                          left: BorderSide(color: FlavorScreen._getFlavorColor(widget.flavor.ingredients.values.elementAt(i), context), width: 5.0)
                         )
                       ),
                       child: Text(widget.flavor.ingredients.keys.elementAt(i))
@@ -92,7 +92,6 @@ class _FlavorScreenState extends State<FlavorScreen> {
             ? SliverStickyHeader(
                 header: Container(
                   height: 60.0,
-                  color: Colors.redAccent,
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   alignment: Alignment.centerLeft,
                   child: const Text(
