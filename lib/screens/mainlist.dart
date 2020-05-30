@@ -27,16 +27,18 @@ class FlavorList extends StatelessWidget {
       body: Consumer<FlavorListProvider>(
         builder: (_, provider, child) => provider.flavors == null 
           ? const Center(child: CircularProgressIndicator()) 
-          : CustomScrollView(
-            slivers: [
-              FlavorsSearchbar(),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (_, i) => FlavorCard(flavor: provider.flavors[i], index: i),
-                  childCount: provider.flavors.length
-                ),
+          : Scrollbar(
+              child: CustomScrollView(
+                slivers: [
+                  FlavorsSearchbar(),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (_, i) => FlavorCard(flavor: provider.flavors[i], index: i),
+                      childCount: provider.flavors.length
+                    ),
+                  )
+                ]
               )
-            ]
           )
       )
     );
