@@ -15,7 +15,9 @@ class Flavor {
 
   final Map<String, int> ingredients;
 
-  const Flavor({
+  bool saved;
+
+  Flavor({
     this.id,
     this.name,
     this.season,
@@ -27,10 +29,11 @@ class Flavor {
     this.techniques,
     this.ingredients,
     this.flavorAffinities,
-    this.avoid
+    this.avoid,
+    this.saved
   });
 
-  factory Flavor.fromJson(dynamic json) {
+  factory Flavor.fromJson(dynamic json, bool saved) {
     return Flavor(
       id: json['ID'],
       name: json['Name'],
@@ -43,7 +46,8 @@ class Flavor {
       techniques: json['Techniques'],
       avoid: json['Avoid'],
       ingredients: Map<String, int>.from(json['Ingredients']),
-      flavorAffinities: json['FlavorAffinities']
+      flavorAffinities: json['FlavorAffinities'],
+      saved: saved
     );
   }
 }

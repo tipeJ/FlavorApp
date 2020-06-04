@@ -1,8 +1,10 @@
 import 'package:FlavorApp/models/models.dart';
+import 'package:FlavorApp/screens/screens.dart';
 import 'package:FlavorApp/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:FlavorApp/resources/resources.dart';
+import 'package:provider/provider.dart';
 
 class FlavorScreen extends StatefulWidget {
   final Flavor flavor;
@@ -36,10 +38,12 @@ class _FlavorScreenState extends State<FlavorScreen> {
   Map<String, int> _flavors;
 
   _FlavorsSortType _sortType;
-  bool _saved = false;
+
+  bool _saved;
 
   @override
   void initState() {
+    _saved = widget.flavor.saved;
     _sortType = _FlavorsSortType.Rating;
     _flavors = widget.flavor.ingredients;
     super.initState();
@@ -68,7 +72,7 @@ class _FlavorScreenState extends State<FlavorScreen> {
                   setState(() {
                     _saved = !_saved;
                   });
-                  print(FlavorRepository().getFlavor(widget.flavor.id).ingredients);
+                  FlavorRepository().toggleSaveFlavor(widget.flavor.id);
                 }
               )
             ],

@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:FlavorApp/models/flavor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:hive/hive.dart';
 
 class FlavorRepository {
   static final FlavorRepository _singleton = FlavorRepository._internal();
+  Box _savedRepo;
 
   factory FlavorRepository() {
     return _singleton;
@@ -16,8 +18,13 @@ class FlavorRepository {
   List<Flavor> _flavors;
 
   Future<bool> initialize() async {
+    Hive.init('FlutterDB');
+    _savedRepo = await Hive.openBox("savedFlavors");
     final data = await rootBundle.loadString("assets/flavordata.json");
-    _flavors = await compute(_parseFlavors, data);
+    _flavors = await compute(_parseFlavors, {
+      'jsonString' : data,
+      'savedIDs' : getSavedFlavorsIDs()
+    });
     return true;
   }
 
@@ -30,13 +37,42 @@ class FlavorRepository {
     });
   }
 
+  List<int> getSavedFlavorsIDs() {
+    return _savedRepo.values.toList().cast<int>();
+  }
+
+  void _saveFlavor(int id) {
+    _savedRepo.add(id);
+    _flavors[id].saved = true;
+  }
+
+  void _unsaveFlavor(int id) {
+    for (var i = 0; i < _savedRepo.length; i++) {
+      if (_savedRepo.getAt(i) == id) {
+        _savedRepo.deleteAt(i);
+        _flavors[id].saved = false;
+        return;
+      }
+    }
+  }
+
+  void toggleSaveFlavor(int id) {
+    if (_flavors[id].saved) {
+      _unsaveFlavor(id);
+    } else {
+      _saveFlavor(id);
+    }
+  }
+
   Flavor getFlavor(int id) => _flavors[id];
 }
 
-List<Flavor> _parseFlavors(String jsonString){
+List<Flavor> _parseFlavors(Map<String, dynamic> args){
+  final String jsonString = args['jsonString'];
+  final List<int> saved = args['savedIDs'];
   final List<Flavor> list = [];
   final data = json.decode(jsonString);
-  data['Ingredients'].forEach((ingredient) => list.add(Flavor.fromJson(ingredient)));
+  data['Ingredients'].forEach((ingredient) => list.add(Flavor.fromJson(ingredient, saved.contains(ingredient['ID']))));
   return list;
 }
 
