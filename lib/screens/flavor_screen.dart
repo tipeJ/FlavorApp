@@ -145,9 +145,10 @@ class _FlavorScreenState extends State<FlavorScreen> {
                   height: 60.0,
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   alignment: Alignment.centerLeft,
-                  child: const Text(
-                    "Flavors to avoid",
-                    style: const TextStyle(color: Colors.white),
+                  color: Theme.of(context).canvasColor,
+                  child: Text(
+                    "Flavors to Avoid",
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
                 sliver: SliverList(

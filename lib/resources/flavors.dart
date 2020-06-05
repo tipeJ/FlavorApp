@@ -30,9 +30,17 @@ class FlavorRepository {
 
   List<Flavor> getAllFlavors() => _flavors;
 
-  Future<List<Flavor>> filterFlavors(String query) {
+  List<Flavor> getAllSavedFlavors() {
+    final saved = getSavedFlavorsIDs();
+    print(saved.toString());
+    return _flavors.where((fl) => saved.contains(fl.id)).toList();
+  }
+
+  Future<List<Flavor>> filterFlavors(String query, bool filterUnSaved) {
+    List<Flavor> allFlavors = _flavors;
+    if (filterUnSaved) allFlavors = getAllSavedFlavors();
     return compute(_filterFlavors, {
-      'flavors' : _flavors,
+      'flavors' : allFlavors,
       'query'   : query
     });
   }

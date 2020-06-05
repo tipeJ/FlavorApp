@@ -53,6 +53,7 @@ class __BottomAppBarWrapperState extends State<_BottomAppBarWrapper> {
   int _currentPage = 1;
 
   final _flavorsListScreen = GlobalKey<NavigatorState>();
+  final _savedFlavorsListScreen = GlobalKey<NavigatorState>();
 
   Future<bool> _didPopRoute() {
     if (_currentPage == 1) {
@@ -69,9 +70,10 @@ class __BottomAppBarWrapperState extends State<_BottomAppBarWrapper> {
         body: IndexedStack(
           index: _currentPage,
           children: [
-            Scaffold(
-              appBar: AppBar(title: const Text("Saved")),
-              body: Container(color: Colors.red),
+            Navigator(
+              onGenerateRoute: RouteGenerator.generateR,
+              key: _savedFlavorsListScreen,
+              initialRoute: 'SavedList',
             ),
             Navigator(
               onGenerateRoute: RouteGenerator.generateR,
@@ -90,7 +92,7 @@ class __BottomAppBarWrapperState extends State<_BottomAppBarWrapper> {
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.collections_bookmark),
-              title: Text("Saved")
+              title: Text("Favourites")
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.list),
@@ -129,6 +131,13 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => ChangeNotifierProvider(
             create: (context) => FlavorListProvider(),
+            builder: (context, child) => FlavorList(),
+          )
+        );
+      case 'SavedList':
+        return MaterialPageRoute(
+          builder: (_) => ChangeNotifierProvider(
+            create: (context) => FlavorListProvider(filterBySaved: true),
             builder: (context, child) => FlavorList(),
           )
         );
