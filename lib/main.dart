@@ -100,6 +100,8 @@ class __BottomAppBarWrapperState extends State<_BottomAppBarWrapper> {
   Future<bool> _didPopRoute() {
     if (_currentPage == 1) {
       return _flavorsListScreen.currentState.maybePop();
+    } else if (_currentPage == 0) {
+      return _savedFlavorsListScreen.currentState.maybePop();
     }
     return Future.value(false);
   }
@@ -127,7 +129,6 @@ class __BottomAppBarWrapperState extends State<_BottomAppBarWrapper> {
               body: Container(color: Colors.red),
             ),
           ],
-          
         ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentPage,
@@ -146,7 +147,9 @@ class __BottomAppBarWrapperState extends State<_BottomAppBarWrapper> {
             )
           ],
           onTap: (i) {
-            if (i == _currentPage && i == 1) {
+            if (i == _currentPage && i == 0) {
+              _savedFlavorsListScreen.currentState.popUntil((route) => route.isFirst);
+            } else if (i == _currentPage && i == 1) {
               _flavorsListScreen.currentState.popUntil((route) => route.isFirst);
             } else {
               setState(() {
