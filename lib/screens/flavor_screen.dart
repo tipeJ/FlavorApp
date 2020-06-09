@@ -1,3 +1,4 @@
+import 'package:FlavorApp/main.dart';
 import 'package:FlavorApp/models/models.dart';
 import 'package:FlavorApp/screens/screens.dart';
 import 'package:FlavorApp/widgets/widgets.dart';
@@ -43,7 +44,6 @@ class _FlavorScreenState extends State<FlavorScreen> {
 
   @override
   void initState() {
-    _saved = widget.flavor.saved;
     _sortType = _FlavorsSortType.Rating;
     _flavors = widget.flavor.ingredients;
     super.initState();
@@ -51,6 +51,7 @@ class _FlavorScreenState extends State<FlavorScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _saved = Provider.of<FavouriteFlavorsProvider>(context, listen: false).isSaved(widget.flavor.id);
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -69,10 +70,14 @@ class _FlavorScreenState extends State<FlavorScreen> {
                 icon: Icon(_saved ? Icons.bookmark : Icons.bookmark_border),
                 tooltip: _saved ? "Unsave Flavor" : "Save Flavor",
                 onPressed: () {
+                  if (_saved) {
+                    Provider.of<FavouriteFlavorsProvider>(context, listen: false).unsaveFlavor(widget.flavor.id);
+                  } else {
+                    Provider.of<FavouriteFlavorsProvider>(context, listen: false).saveFlavor(widget.flavor.id);
+                  }
                   setState(() {
                     _saved = !_saved;
                   });
-                  FlavorRepository().toggleSaveFlavor(widget.flavor.id);
                 }
               )
             ],

@@ -1,11 +1,50 @@
+import 'package:FlavorApp/models/models.dart';
 import 'package:FlavorApp/resources/flavors.dart';
+import 'package:FlavorApp/screens/favourites_screen.dart';
 import 'package:FlavorApp/screens/flavor_screen.dart';
 import 'package:FlavorApp/screens/mainlist.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());
+}
+
+class FavouriteFlavorsProvider extends ChangeNotifier {
+  static FlavorRepository _repository = FlavorRepository();
+  Box _favouritesBox;
+
+  Future<FavouriteFlavorsProvider> initialize() async {
+    Hive.init('FlutterDB');
+    _favouritesBox = await Hive.openBox("favouriteFlavors");
+    await FlavorRepository().initialize();
+    return this;
+  }
+
+  void saveFlavor(int id) {
+    _favouritesBox.add(id);
+    notifyListeners();
+  }
+
+  void unsaveFlavor(int id) {
+    for (var i = 0; i < _favouritesBox.length; i++) {
+      if (_favouritesBox.getAt(i) == id) {
+        _favouritesBox.deleteAt(i);
+        return;
+      }
+    }
+    notifyListeners();
+  }
+
+  bool isSaved(int id) {
+    for (var i = 0; i < _favouritesBox.length; i++) {
+      if (_favouritesBox.getAt(i) == id) return true;
+    }
+    return false;
+  }
+
+  List<Flavor> getSavedFlavors() => _repository.getFlavorsByIds(List<int>.from(_favouritesBox.values));
 }
 
 class MyApp extends StatelessWidget {
@@ -30,12 +69,15 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: FutureBuilder<bool>(
-        future: FlavorRepository().initialize(),
-        builder: (context, snapshot) => snapshot.hasData
-          ? _BottomAppBarWrapper()
-          : const Center(child: CircularProgressIndicator())
-      ),
+      home: FutureBuilder<FavouriteFlavorsProvider>(
+          future: FavouriteFlavorsProvider().initialize(),
+          builder: (context, snapshot) => snapshot.hasData
+            ? ChangeNotifierProvider.value(
+                value: snapshot.data,
+                builder: (context, child) => _BottomAppBarWrapper()
+              )
+            : const Center(child: CircularProgressIndicator())
+        )
     );
   }
 }
@@ -136,10 +178,7 @@ class RouteGenerator {
         );
       case 'SavedList':
         return MaterialPageRoute(
-          builder: (_) => ChangeNotifierProvider(
-            create: (context) => FlavorListProvider(filterBySaved: true),
-            builder: (context, child) => FlavorList(),
-          )
+          builder: (_) => FavouritesScreen()
         );
       default:
         return MaterialPageRoute(builder: (_) => Material(child: Text("No Route Defined for ${settings.name}")));

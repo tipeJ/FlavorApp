@@ -5,11 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class FlavorListProvider extends ChangeNotifier {
-  bool filterBySaved;
-  
-  FlavorListProvider({bool filterBySaved = false}) {
-    this.filterBySaved = filterBySaved;
-    flavors = filterBySaved ? _repository.getAllSavedFlavors() : _repository.getAllFlavors();
+  FlavorListProvider() {
+    flavors = _repository.getAllFlavors();
   }
 
   static FlavorRepository _repository = FlavorRepository();
@@ -17,9 +14,9 @@ class FlavorListProvider extends ChangeNotifier {
 
   void search(String query) async {
     if (query.isEmpty) {
-      flavors = filterBySaved ? _repository.getAllSavedFlavors() : _repository.getAllFlavors();
+      flavors = _repository.getAllFlavors();
     } else {
-      flavors = await _repository.filterFlavors(query, filterBySaved);
+      flavors = await _repository.filterFlavors(query);
     }
     notifyListeners();
   }

@@ -15,8 +15,6 @@ class Flavor {
 
   final Map<String, int> ingredients;
 
-  bool saved;
-
   Flavor({
     this.id,
     this.name,
@@ -30,10 +28,9 @@ class Flavor {
     this.ingredients,
     this.flavorAffinities,
     this.avoid,
-    this.saved
   });
 
-  factory Flavor.fromJson(dynamic json, bool saved) {
+  factory Flavor.fromJson(dynamic json) {
     return Flavor(
       id: json['ID'],
       name: json['Name'],
@@ -47,7 +44,6 @@ class Flavor {
       avoid: json['Avoid'],
       ingredients: Map<String, int>.from(json['Ingredients']),
       flavorAffinities: json['FlavorAffinities'],
-      saved: saved
     );
   }
 }
