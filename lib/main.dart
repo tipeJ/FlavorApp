@@ -1,8 +1,10 @@
 import 'package:FlavorApp/models/models.dart';
 import 'package:FlavorApp/resources/flavors.dart';
+import 'package:FlavorApp/resources/preferences.dart';
 import 'package:FlavorApp/screens/favourites_screen.dart';
 import 'package:FlavorApp/screens/flavor_screen.dart';
 import 'package:FlavorApp/screens/mainlist.dart';
+import 'package:FlavorApp/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +18,6 @@ class FavouriteFlavorsProvider extends ChangeNotifier {
   Box _favouritesBox;
 
   Future<FavouriteFlavorsProvider> initialize() async {
-    Hive.init('FlutterDB');
     _favouritesBox = await Hive.openBox("favouriteFlavors");
     await FlavorRepository().initialize();
     return this;
@@ -51,33 +52,30 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'FlavorApp',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: FutureBuilder<FavouriteFlavorsProvider>(
-          future: FavouriteFlavorsProvider().initialize(),
-          builder: (context, snapshot) => snapshot.hasData
-            ? ChangeNotifierProvider.value(
-                value: snapshot.data,
-                builder: (context, child) => _BottomAppBarWrapper()
+    return FutureBuilder<PreferencesProvider>(
+      future: PreferencesProvider().initialize(),
+      builder: (context, snapshot) => snapshot.hasData
+        ? ChangeNotifierProvider.value(
+            value: snapshot.data,
+            builder: (context, child) => Consumer<PreferencesProvider>(
+              builder: (context, provider, child) => MaterialApp(
+                theme: ThemeData(
+                  brightness: provider.darkMode ? Brightness.dark : Brightness.light
+                ),
+                home: FutureBuilder<FavouriteFlavorsProvider>(
+                    future: FavouriteFlavorsProvider().initialize(),
+                    builder: (context, snapshot) => snapshot.hasData
+                      ? ChangeNotifierProvider.value(
+                          value: snapshot.data,
+                          builder: (context, child) => _BottomAppBarWrapper()
+                        )
+                      : const Center(child: CircularProgressIndicator())
+                  )
               )
-            : const Center(child: CircularProgressIndicator())
+            )
         )
+          // Empty container as a placeholder
+        : Container()
     );
   }
 }
@@ -124,10 +122,7 @@ class __BottomAppBarWrapperState extends State<_BottomAppBarWrapper> {
               key: _flavorsListScreen,
               initialRoute: 'MainList',
             ),
-            Scaffold(
-              appBar: AppBar(title: const Text("Settings")),
-              body: Container(color: Colors.red),
-            ),
+            PreferencesScreen()
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
