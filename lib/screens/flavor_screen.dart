@@ -1,6 +1,5 @@
 import 'package:FlavorApp/main.dart';
 import 'package:FlavorApp/models/models.dart';
-import 'package:FlavorApp/screens/screens.dart';
 import 'package:FlavorApp/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -37,6 +36,7 @@ enum _FlavorsSortType {
 
 class _FlavorScreenState extends State<FlavorScreen> {
   static const _edgePadding = EdgeInsets.symmetric(horizontal: 16.0);
+  static const _listItemPadding = const EdgeInsets.all(5.0);
   
   Map<String, int> _flavors;
 
@@ -136,7 +136,7 @@ class _FlavorScreenState extends State<FlavorScreen> {
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, i) => Container(
-                          padding: const EdgeInsets.all(5.0),
+                          padding: _listItemPadding,
                           decoration: BoxDecoration(
                             border: Border(
                               left: BorderSide(color: FlavorScreen._getFlavorColor(widget.flavor.ingredients.values.elementAt(i), context), width: 5.0)
@@ -145,6 +145,29 @@ class _FlavorScreenState extends State<FlavorScreen> {
                           child: Text(widget.flavor.ingredients.keys.elementAt(i))
                         ),
                     childCount: widget.flavor.ingredients.length,
+                  ),
+                ),
+              )
+            : null,
+          widget.flavor.flavorAffinities.isNotEmpty
+            ? SliverStickyHeader(
+                header: Container(
+                  height: 60.0,
+                  padding: _edgePadding,
+                  alignment: Alignment.centerLeft,
+                  color: Theme.of(context).canvasColor,
+                  child: Text(
+                    "Affinities",
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                ),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, i) => Container(
+                          padding: _listItemPadding,
+                          child: Text(widget.flavor.flavorAffinities[i])
+                        ),
+                    childCount: widget.flavor.flavorAffinities.length,
                   ),
                 ),
               )
@@ -164,7 +187,7 @@ class _FlavorScreenState extends State<FlavorScreen> {
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, i) => Container(
-                          padding: const EdgeInsets.all(5.0),
+                          padding: _listItemPadding,
                           child: Text(widget.flavor.avoid[i])
                         ),
                     childCount: widget.flavor.avoid.length,
