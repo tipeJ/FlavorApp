@@ -11,10 +11,13 @@ class FlavorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: InkWell(
-        onTap: () => Navigator.of(context).pushNamed('FlavorScreen', arguments: {
-          'flavor' : flavor,
-          'index' : index
-        }),
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+          Navigator.of(context).pushNamed('FlavorScreen', arguments: {
+            'flavor' : flavor,
+            'index' : index
+          });
+        },
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
