@@ -145,7 +145,7 @@ class __BottomAppBarWrapperState extends State<_BottomAppBarWrapper> {
             if (i == _currentPage && i == 0) {
               _savedFlavorsListScreen.currentState.popUntil((route) => route.isFirst);
             } else if (i == _currentPage && i == 1) {
-              _flavorsListScreen.currentState.popUntil((route) => route.isFirst);
+              _flavorsListScreen.currentState.maybePop();
             } else {
               setState(() {
                 _currentPage = i;

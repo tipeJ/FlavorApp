@@ -22,29 +22,65 @@ class FlavorListProvider extends ChangeNotifier {
   }
 }
 
-class FlavorList extends StatelessWidget {
-  const FlavorList({Key key}) : super(key: key);
+class FlavorList extends StatefulWidget {
+  FlavorList({Key key}) : super(key: key);
+
+  @override
+  _FlavorListState createState() => _FlavorListState();
+}
+
+class _FlavorListState extends State<FlavorList> {
+  ScrollController _controller;
+
+  @override
+  void initState() { 
+    super.initState();
+    _controller = ScrollController();
+  }
+  @override
+  void dispose() { 
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<bool> _willPop() {
+    if (_controller.offset <= 25.0) {
+      return Future.value(true);
+    }
+    // Do a quick jump 'n animate if the offset is high enough (To avoid loading unnecessary list items)
+    if (_controller.offset < 2000) {
+      _controller.animateTo(0.0, duration: Duration(milliseconds: 500), curve: Curves.ease);
+    } else {
+      _controller.jumpTo(350.0);
+      _controller.animateTo(0.0, duration: Duration(milliseconds: 500), curve: Curves.ease);
+    }
+    return Future.value(false);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Consumer<FlavorListProvider>(
-        builder: (_, provider, child) => provider.flavors == null 
-          ? const Center(child: CircularProgressIndicator()) 
-          : Scrollbar(
-              child: CustomScrollView(
-                slivers: [
-                  FlavorsSearchbar(),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (_, i) => FlavorCard(flavor: provider.flavors[i], index: i),
-                      childCount: provider.flavors.length
-                    ),
-                  )
-                ]
-              )
-          )
-      )
+    return WillPopScope(
+      onWillPop: _willPop,
+      child: Scaffold(
+        body: Consumer<FlavorListProvider>(
+          builder: (_, provider, child) => provider.flavors == null 
+            ? const Center(child: CircularProgressIndicator()) 
+            : Scrollbar(
+                child: CustomScrollView(
+                  controller: _controller,
+                  slivers: [
+                    FlavorsSearchbar(),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (_, i) => FlavorCard(flavor: provider.flavors[i], index: i),
+                        childCount: provider.flavors.length
+                      ),
+                    )
+                  ]
+                )
+            )
+        ),
+      ),
     );
   }
 }
