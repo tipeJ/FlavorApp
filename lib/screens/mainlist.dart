@@ -48,12 +48,10 @@ class _FlavorListState extends State<FlavorList> {
       return Future.value(true);
     }
     // Do a quick jump 'n animate if the offset is high enough (To avoid loading unnecessary list items)
-    if (_controller.offset < 2000) {
-      _controller.animateTo(0.0, duration: Duration(milliseconds: 500), curve: Curves.ease);
-    } else {
+    if (_controller.offset > 2000) {
       _controller.jumpTo(350.0);
-      _controller.animateTo(0.0, duration: Duration(milliseconds: 500), curve: Curves.ease);
     }
+    _controller.animateTo(0.0, duration: Duration(milliseconds: 500), curve: Curves.ease);
     return Future.value(false);
   }
 
