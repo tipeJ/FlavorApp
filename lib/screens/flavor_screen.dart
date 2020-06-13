@@ -36,6 +36,8 @@ enum _FlavorsSortType {
 }
 
 class _FlavorScreenState extends State<FlavorScreen> {
+  static const _edgePadding = EdgeInsets.symmetric(horizontal: 16.0);
+  
   Map<String, int> _flavors;
 
   _FlavorsSortType _sortType;
@@ -98,29 +100,32 @@ class _FlavorScreenState extends State<FlavorScreen> {
                 ),
               )
             : null,
-          SliverList(delegate: SliverChildListDelegate([
-            widget.flavor.function.isNotEmpty
-              ? Text.rich(TextSpan(
-                children: [
-                  TextSpan(text: "Function: ", style: TextStyle(fontWeight: FontWeight.bold)),
-                  TextSpan(text: widget.flavor.function)
-                ]
-              ))
-              : null,
-            widget.flavor.tips.isNotEmpty
-              ? Text.rich(TextSpan(
-                children: [
-                  TextSpan(text: "Tips: ", style: TextStyle(fontWeight: FontWeight.bold)),
-                  TextSpan(text: widget.flavor.tips)
-                ]
-              ))
-              : null,
-          ].nonNulls())),
+          SliverPadding(
+            padding: _edgePadding,
+            sliver: SliverList(delegate: SliverChildListDelegate([
+              widget.flavor.function.isNotEmpty
+                ? Text.rich(TextSpan(
+                  children: [
+                    TextSpan(text: "Function: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: widget.flavor.function)
+                  ]
+                ))
+                : null,
+              widget.flavor.tips.isNotEmpty
+                ? Text.rich(TextSpan(
+                  children: [
+                    TextSpan(text: "Tips: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: widget.flavor.tips)
+                  ]
+                ))
+                : null,
+            ].nonNulls()))
+          ),
           widget.flavor.ingredients.isNotEmpty
             ? SliverStickyHeader(
                 header: Container(
                   height: 60.0,
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: _edgePadding,
                   alignment: Alignment.centerLeft,
                   color: Theme.of(context).canvasColor,
                   child: Text(
