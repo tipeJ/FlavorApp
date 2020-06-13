@@ -178,7 +178,7 @@ class _FlavorScreenState extends State<FlavorScreen> {
                 ),
               )
             : null,
-          widget.flavor.flavorAffinities.isNotEmpty
+          widget.flavor.flavorAffinities != null && widget.flavor.flavorAffinities.isNotEmpty
             ? SliverStickyHeader(
                 header: Container(
                   height: 60.0,
