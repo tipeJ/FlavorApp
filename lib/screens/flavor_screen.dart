@@ -51,6 +51,19 @@ class _FlavorScreenState extends State<FlavorScreen> {
     super.initState();
   }
 
+  void _toggleSortFlavors() {
+    if (_sortType == _FlavorsSortType.Alphabetical) {
+      _flavors = widget.flavor.ingredients;
+      _sortType = _FlavorsSortType.Rating;
+    } else {
+      // Sort the flavors alphabetically;
+      final List<String> newList = _flavors.keys.toList()..sort();
+      _flavors = {};
+      newList.forEach((key) => _flavors[key] = widget.flavor.ingredients[key]);
+      _sortType = _FlavorsSortType.Alphabetical;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _saved = Provider.of<FavouriteFlavorsProvider>(context, listen: false).isSaved(widget.flavor.id);
@@ -128,9 +141,25 @@ class _FlavorScreenState extends State<FlavorScreen> {
                   padding: _edgePadding,
                   alignment: Alignment.centerLeft,
                   color: Theme.of(context).canvasColor,
-                  child: Text(
-                    "Recommended Flavors",
-                    style: Theme.of(context).textTheme.headline6,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Recommended Flavors",
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      Material(
+                        child: IconButton(
+                          icon: Icon(_sortType == _FlavorsSortType.Rating ? Icons.sort : Icons.sort_by_alpha),
+                          tooltip: _sortType == _FlavorsSortType.Rating ? "Sort Alphabetically" : "Sort by Rating",
+                          onPressed: () {
+                            setState(() {
+                              _toggleSortFlavors();
+                            });
+                          },
+                        )
+                      )
+                    ]
                   ),
                 ),
                 sliver: SliverList(
@@ -139,12 +168,12 @@ class _FlavorScreenState extends State<FlavorScreen> {
                           padding: _listItemPadding,
                           decoration: BoxDecoration(
                             border: Border(
-                              left: BorderSide(color: FlavorScreen._getFlavorColor(widget.flavor.ingredients.values.elementAt(i), context), width: 5.0)
+                              left: BorderSide(color: FlavorScreen._getFlavorColor(_flavors.values.elementAt(i), context), width: 5.0)
                             )
                           ),
-                          child: Text(widget.flavor.ingredients.keys.elementAt(i))
+                          child: Text(_flavors.keys.elementAt(i))
                         ),
-                    childCount: widget.flavor.ingredients.length,
+                    childCount: _flavors.length,
                   ),
                 ),
               )
