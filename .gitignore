@@ -14,7 +14,7 @@
 /assets/
 
 # Hive DB
-/FlutterDB/
+FlutterDB/
 
 # IntelliJ related
 *.iml
