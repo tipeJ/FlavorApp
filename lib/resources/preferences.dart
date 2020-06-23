@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 
 const PREFS_DARK_MODE = "preferencesDarkMode";
 
@@ -10,7 +13,9 @@ class PreferencesProvider extends ChangeNotifier {
 
   /// Initialize This application's Hive Database directory, and open the corresponding box.
   Future<PreferencesProvider> initialize() async {
-    Hive.init('FlutterDB');
+    Directory appDocDirectory = await getApplicationDocumentsDirectory();
+    
+    Hive.init(appDocDirectory.path + 'FlutterDB');
     _box = await Hive.openBox("preferencesBox");
     return this;
   }
