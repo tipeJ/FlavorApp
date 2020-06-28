@@ -95,11 +95,11 @@ class __BottomAppBarWrapperState extends State<_BottomAppBarWrapper> {
   final _flavorsListScreen = GlobalKey<NavigatorState>();
   final _savedFlavorsListScreen = GlobalKey<NavigatorState>();
 
-  Future<bool> _didPopRoute() {
+  Future<bool> _didPopRoute() async {
     if (_currentPage == 1) {
-      return _flavorsListScreen.currentState.maybePop();
+      _flavorsListScreen.currentState.maybePop();
     } else if (_currentPage == 0) {
-      return _savedFlavorsListScreen.currentState.maybePop();
+      _savedFlavorsListScreen.currentState.maybePop();
     }
     return Future.value(false);
   }

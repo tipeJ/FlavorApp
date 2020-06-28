@@ -71,7 +71,7 @@ class _FlavorListState extends State<FlavorList> {
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (_, i) => FlavorCard(flavor: provider.flavors[i], index: i),
-                        childCount: provider.flavors.length
+                        childCount: provider.flavors.length,
                       ),
                     )
                   ]
