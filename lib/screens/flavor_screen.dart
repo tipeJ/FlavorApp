@@ -46,8 +46,10 @@ class _FlavorScreenState extends State<FlavorScreen> {
 
   @override
   void initState() {
-    _sortType = _FlavorsSortType.Rating;
     _flavors = widget.flavor.ingredients;
+    // Fetch the default sort type from preferences.
+    _sortType = Provider.of<PreferencesProvider>(context, listen: false).sortByAlpha ? _FlavorsSortType.Alphabetical : _FlavorsSortType.Rating;
+    if (_sortType == _FlavorsSortType.Alphabetical) _sortByAlpha();
     super.initState();
   }
 
@@ -56,12 +58,16 @@ class _FlavorScreenState extends State<FlavorScreen> {
       _flavors = widget.flavor.ingredients;
       _sortType = _FlavorsSortType.Rating;
     } else {
-      // Sort the flavors alphabetically;
-      final List<String> newList = _flavors.keys.toList()..sort();
-      _flavors = {};
-      newList.forEach((key) => _flavors[key] = widget.flavor.ingredients[key]);
-      _sortType = _FlavorsSortType.Alphabetical;
+      _sortByAlpha();
     }
+  }
+
+  /// Sort the flavors alphabetically;
+  void _sortByAlpha() {
+    final List<String> newList = _flavors.keys.toList()..sort();
+    _flavors = {};
+    newList.forEach((key) => _flavors[key] = widget.flavor.ingredients[key]);
+    _sortType = _FlavorsSortType.Alphabetical;
   }
 
   @override

@@ -19,6 +19,17 @@ class PreferencesScreen extends StatelessWidget {
                 onChanged: (newValue) => provider.putSetting(PREFS_DARK_MODE, newValue)
               ),
               onTap: () => provider.putSetting(PREFS_DARK_MODE, !provider.darkMode),
+            ),
+            ListTile(
+              title: const Text("Default Sort"),
+              subtitle: Text(provider.sortByAlpha ? "Alphabetical" : "Rating"),
+              trailing: IconButton(
+                icon: Icon(provider.sortByAlpha ? Icons.sort_by_alpha : Icons.sort), 
+                onPressed: () {
+                  provider.putSetting(PREFS_DEFAULT_SORT_ALPHA, !provider.sortByAlpha);
+                }
+              ),
+              onTap: () => provider.putSetting(PREFS_DEFAULT_SORT_ALPHA, !provider.sortByAlpha),
             )
           ],
         ),
