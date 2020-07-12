@@ -107,8 +107,8 @@ class _FlavorScreenState extends State<FlavorScreen> {
             ? SliverToBoxAdapter(
                 child: Container(
                   height: 75.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
                     children: [
                       widget.flavor.season.isNotEmpty ? SeasonDescription(widget.flavor.season) : null,
                       widget.flavor.taste.isNotEmpty ? TasteDescription(widget.flavor.taste) : null,

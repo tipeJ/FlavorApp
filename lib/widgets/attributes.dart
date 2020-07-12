@@ -27,17 +27,20 @@ class _AttributeDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Text(
-          title,
-          textScaleFactor: 1.5,
-          style: const TextStyle(fontWeight: FontWeight.bold)
-        )
-      ),
-      Text(content)
-    ]);
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            textScaleFactor: 1.5,
+            style: const TextStyle(fontWeight: FontWeight.bold)
+          ),
+          Text(content)
+        ]
+      )
+    );
   }
 }
 
