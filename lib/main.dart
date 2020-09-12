@@ -32,7 +32,7 @@ class FavouriteFlavorsProvider extends ChangeNotifier {
     for (var i = 0; i < _favouritesBox.length; i++) {
       if (_favouritesBox.getAt(i) == id) {
         _favouritesBox.deleteAt(i);
-        return;
+        continue;
       }
     }
     notifyListeners();
@@ -45,7 +45,8 @@ class FavouriteFlavorsProvider extends ChangeNotifier {
     return false;
   }
 
-  List<Flavor> getSavedFlavors() => _repository.getFlavorsByIds(List<int>.from(_favouritesBox.values));
+  List<Flavor> getSavedFlavors() =>
+      _repository.getFlavorsByIds(List<int>.from(_favouritesBox.values));
 }
 
 class MyApp extends StatelessWidget {
@@ -53,33 +54,29 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<PreferencesProvider>(
-      future: PreferencesProvider().initialize(),
-      builder: (context, snapshot) => snapshot.hasData
-        ? ChangeNotifierProvider.value(
-            value: snapshot.data,
-            builder: (context, child) => Consumer<PreferencesProvider>(
-              builder: (context, provider, child) => MaterialApp(
-                theme: ThemeData(
-                  brightness: provider.darkMode ? Brightness.dark : Brightness.light
-                ),
-                home: FutureBuilder<FavouriteFlavorsProvider>(
-                    future: FavouriteFlavorsProvider().initialize(),
-                    builder: (context, snapshot) => snapshot.hasData
-                      ? ChangeNotifierProvider.value(
-                          value: snapshot.data,
-                          builder: (context, child) => _BottomAppBarWrapper()
-                        )
-                      : const Center(child: CircularProgressIndicator())
-                  )
-              )
-            )
-        )
-          // Empty container as a placeholder
-        : Container()
-    );
+        future: PreferencesProvider().initialize(),
+        builder: (context, snapshot) => snapshot.hasData
+            ? ChangeNotifierProvider.value(
+                value: snapshot.data,
+                builder: (context, child) => Consumer<PreferencesProvider>(
+                    builder: (context, provider, child) => MaterialApp(
+                        theme: ThemeData(
+                            brightness: provider.darkMode
+                                ? Brightness.dark
+                                : Brightness.light),
+                        home: FutureBuilder<FavouriteFlavorsProvider>(
+                            future: FavouriteFlavorsProvider().initialize(),
+                            builder: (context, snapshot) => snapshot.hasData
+                                ? ChangeNotifierProvider.value(
+                                    value: snapshot.data,
+                                    builder: (context, child) =>
+                                        _BottomAppBarWrapper())
+                                : const Center(
+                                    child: CircularProgressIndicator())))))
+            // Empty container as a placeholder
+            : Container());
   }
 }
-
 
 class _BottomAppBarWrapper extends StatefulWidget {
   _BottomAppBarWrapper({Key key}) : super(key: key);
@@ -89,7 +86,6 @@ class _BottomAppBarWrapper extends StatefulWidget {
 }
 
 class __BottomAppBarWrapperState extends State<_BottomAppBarWrapper> {
-
   int _currentPage = 1;
 
   final _flavorsListScreen = GlobalKey<NavigatorState>();
@@ -107,79 +103,71 @@ class __BottomAppBarWrapperState extends State<_BottomAppBarWrapper> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: _didPopRoute,
-      child: Scaffold(
-        body: IndexedStack(
-          index: _currentPage,
-          children: [
-            Navigator(
-              onGenerateRoute: RouteGenerator.generateR,
-              key: _savedFlavorsListScreen,
-              initialRoute: 'SavedList',
-            ),
-            Navigator(
-              onGenerateRoute: RouteGenerator.generateR,
-              key: _flavorsListScreen,
-              initialRoute: 'MainList',
-            ),
-            PreferencesScreen()
-          ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentPage,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.collections_bookmark),
-              title: Text("Favourites")
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              title: Text("Flavors")
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              title: Text("Settings")
-            )
-          ],
-          onTap: (i) {
-            if (i == _currentPage && i == 0) {
-              _savedFlavorsListScreen.currentState.popUntil((route) => route.isFirst);
-            } else if (i == _currentPage && i == 1) {
-              _flavorsListScreen.currentState.maybePop();
-            } else {
-              setState(() {
-                _currentPage = i;
-              });
-            }
-          },
-        ),
-      )
-    );
+        onWillPop: _didPopRoute,
+        child: Scaffold(
+          body: IndexedStack(
+            index: _currentPage,
+            children: [
+              Navigator(
+                onGenerateRoute: RouteGenerator.generateR,
+                key: _savedFlavorsListScreen,
+                initialRoute: 'SavedList',
+              ),
+              Navigator(
+                onGenerateRoute: RouteGenerator.generateR,
+                key: _flavorsListScreen,
+                initialRoute: 'MainList',
+              ),
+              PreferencesScreen()
+            ],
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _currentPage,
+            items: const [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.collections_bookmark), label: "Favourites"),
+              BottomNavigationBarItem(icon: Icon(Icons.list), label: "Flavors"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.settings), label: "Settings")
+            ],
+            onTap: (i) {
+              if (i == _currentPage && i == 0) {
+                _savedFlavorsListScreen.currentState
+                    .popUntil((route) => route.isFirst);
+              } else if (i == _currentPage && i == 1) {
+                _flavorsListScreen.currentState.maybePop();
+              } else {
+                setState(() {
+                  _currentPage = i;
+                });
+              }
+            },
+          ),
+        ));
   }
 }
 
 class RouteGenerator {
-  static Route<dynamic> generateR(RouteSettings settings){
+  static Route<dynamic> generateR(RouteSettings settings) {
     switch (settings.name) {
       case 'FlavorScreen':
         Map<String, dynamic> args = settings.arguments;
         return MaterialPageRoute(
-          builder: (_) => FlavorScreen(flavor: args['flavor'], index: args['index'])
-        );
+            builder: (_) =>
+                FlavorScreen(flavor: args['flavor'], index: args['index']));
         break;
       case 'MainList':
         return MaterialPageRoute(
-          builder: (_) => ChangeNotifierProvider(
-            create: (context) => FlavorListProvider(),
-            builder: (context, child) => FlavorList(),
-          )
-        );
+            builder: (_) => ChangeNotifierProvider(
+                  create: (context) => FlavorListProvider(),
+                  builder: (context, child) => FlavorList(),
+                ));
       case 'SavedList':
-        return MaterialPageRoute(
-          builder: (_) => FavouritesScreen()
-        );
+        return MaterialPageRoute(builder: (_) => FavouritesScreen());
       default:
-        return MaterialPageRoute(builder: (_) => Material(child: Text("No Route Defined for ${settings.name}")));
+        return MaterialPageRoute(
+            builder: (_) =>
+                Material(child: Text("No Route Defined for ${settings.name}")));
     }
   }
 }

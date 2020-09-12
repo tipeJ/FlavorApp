@@ -10,19 +10,26 @@ class FavouritesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Consumer<FavouriteFlavorsProvider>(
-        builder: (_, provider, child) => Scrollbar(
-          child: CustomScrollView(
-            slivers: [
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (_, i) => FlavorCard(flavor: provider.getSavedFlavors()[i], index: i),
-                  childCount: provider.getSavedFlavors().length
-                ),
-              )
-            ]
-          )
-        )
-      )
+        builder: (_, provider, child) => provider.getSavedFlavors().isEmpty
+            ? Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                    Icon(Icons.bookmark, size: 52.0),
+                    Text("No Favourites Yet.")
+                  ]))
+            : Scrollbar(
+                child: CustomScrollView(slivers: [
+                  SliverSafeArea(
+                      sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                        (_, i) => FlavorCard(
+                            flavor: provider.getSavedFlavors()[i], index: i),
+                        childCount: provider.getSavedFlavors().length),
+                  ))
+                ]),
+              ),
+      ),
     );
   }
 }
