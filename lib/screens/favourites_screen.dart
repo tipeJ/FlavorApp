@@ -15,7 +15,7 @@ class FavouritesScreen extends StatelessWidget {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                    Icon(Icons.bookmark, size: 52.0),
+                    Icon(Icons.bookmark_border, size: 52.0),
                     Text("No Favourites Yet.")
                   ]))
             : Scrollbar(

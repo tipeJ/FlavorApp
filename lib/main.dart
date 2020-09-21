@@ -23,11 +23,13 @@ class FavouriteFlavorsProvider extends ChangeNotifier {
     return this;
   }
 
+  /// Save flavor to favourites Box.
   void saveFlavor(int id) {
     _favouritesBox.add(id);
     notifyListeners();
   }
 
+  /// delete flavor from the favourites Box.
   void unsaveFlavor(int id) {
     for (var i = 0; i < _favouritesBox.length; i++) {
       if (_favouritesBox.getAt(i) == id) {
@@ -38,6 +40,7 @@ class FavouriteFlavorsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Checks wheteher the flavor exists in the favourites Box.
   bool isSaved(int id) {
     for (var i = 0; i < _favouritesBox.length; i++) {
       if (_favouritesBox.getAt(i) == id) return true;
@@ -45,6 +48,7 @@ class FavouriteFlavorsProvider extends ChangeNotifier {
     return false;
   }
 
+  /// Gets all of the flavors from the favourites Box.
   List<Flavor> getSavedFlavors() =>
       _repository.getFlavorsByIds(List<int>.from(_favouritesBox.values));
 }
@@ -60,6 +64,7 @@ class MyApp extends StatelessWidget {
                 value: snapshot.data,
                 builder: (context, child) => Consumer<PreferencesProvider>(
                     builder: (context, provider, child) => MaterialApp(
+                        debugShowCheckedModeBanner: false,
                         theme: ThemeData(
                             brightness: provider.darkMode
                                 ? Brightness.dark
