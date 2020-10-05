@@ -30,7 +30,7 @@ class FlavorScreen extends StatefulWidget {
   }
 }
 
-enum _FlavorsSortType { Rating, Alphabetical }
+enum _FlavorsSortType { Rating, Alphabetical, None }
 
 class _FlavorScreenState extends State<FlavorScreen> {
   static const _edgePadding = EdgeInsets.symmetric(horizontal: 16.0);
@@ -46,11 +46,15 @@ class _FlavorScreenState extends State<FlavorScreen> {
   void initState() {
     _flavors = widget.flavor.ingredients;
     // Fetch the default sort type from preferences.
-    _sortType =
-        Provider.of<PreferencesProvider>(context, listen: false).sortByAlpha
-            ? _FlavorsSortType.Alphabetical
-            : _FlavorsSortType.Rating;
-    if (_sortType == _FlavorsSortType.Alphabetical) _sortByAlpha();
+    if (!(_flavors.values.any((t) => t > 0))) {
+      _sortType = _FlavorsSortType.None;
+    } else if (Provider.of<PreferencesProvider>(context, listen: false)
+        .sortByAlpha) {
+      _sortType = _FlavorsSortType.Alphabetical;
+      _sortByAlpha();
+    } else {
+      _sortType = _FlavorsSortType.Rating;
+    }
     super.initState();
   }
 
@@ -58,7 +62,7 @@ class _FlavorScreenState extends State<FlavorScreen> {
     if (_sortType == _FlavorsSortType.Alphabetical) {
       _flavors = widget.flavor.ingredients;
       _sortType = _FlavorsSortType.Rating;
-    } else {
+    } else if (_sortType != _FlavorsSortType.None) {
       _sortByAlpha();
     }
   }
@@ -168,20 +172,22 @@ class _FlavorScreenState extends State<FlavorScreen> {
                           "Recommended Flavors",
                           style: Theme.of(context).textTheme.headline6,
                         ),
-                        Material(
-                            child: IconButton(
-                          icon: Icon(_sortType == _FlavorsSortType.Rating
-                              ? Icons.sort
-                              : Icons.sort_by_alpha),
-                          tooltip: _sortType == _FlavorsSortType.Rating
-                              ? "Sort Alphabetically"
-                              : "Sort by Rating",
-                          onPressed: () {
-                            setState(() {
-                              _toggleSortFlavors();
-                            });
-                          },
-                        ))
+                        _sortType != _FlavorsSortType.None
+                            ? Material(
+                                child: IconButton(
+                                icon: Icon(_sortType == _FlavorsSortType.Rating
+                                    ? Icons.sort
+                                    : Icons.sort_by_alpha),
+                                tooltip: _sortType == _FlavorsSortType.Rating
+                                    ? "Sort Alphabetically"
+                                    : "Sort by Rating",
+                                onPressed: () {
+                                  setState(() {
+                                    _toggleSortFlavors();
+                                  });
+                                },
+                              ))
+                            : Container()
                       ]),
                 ),
                 sliver: SliverList(
