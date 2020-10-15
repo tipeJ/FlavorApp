@@ -11,7 +11,7 @@
 .svn/
 
 # Assets
-/assets/
+/assets/flavordata.json
 
 # Hive DB
 /FlutterDB/
