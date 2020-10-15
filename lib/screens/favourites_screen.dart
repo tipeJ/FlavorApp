@@ -14,7 +14,7 @@ class FavouritesScreen extends StatelessWidget {
             ? Center(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: const [
                     Icon(Icons.bookmark_border, size: 52.0),
                     Text("No Favourites Yet.")
                   ]))

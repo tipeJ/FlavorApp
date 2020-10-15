@@ -16,7 +16,7 @@ class FlavorScreen extends StatefulWidget {
   @override
   _FlavorScreenState createState() => _FlavorScreenState();
 
-  static Color _getFlavorColor(int recommendedValue, BuildContext context) {
+  static Color getFlavorColor(int recommendedValue, BuildContext context) {
     switch (recommendedValue) {
       case 3:
         return Colors.green;
@@ -197,7 +197,7 @@ class _FlavorScreenState extends State<FlavorScreen> {
                         decoration: BoxDecoration(
                             border: Border(
                                 left: BorderSide(
-                                    color: FlavorScreen._getFlavorColor(
+                                    color: FlavorScreen.getFlavorColor(
                                         _flavors.values.elementAt(i), context),
                                     width: 5.0))),
                         child: Text(_flavors.keys.elementAt(i))),
@@ -222,7 +222,8 @@ class _FlavorScreenState extends State<FlavorScreen> {
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, i) => Container(
-                        padding: _listItemPadding,
+                        padding: _listItemPadding
+                            .add(const EdgeInsets.only(left: 5.0)),
                         child: Text(widget.flavor.flavorAffinities[i])),
                     childCount: widget.flavor.flavorAffinities.length,
                   ),
@@ -244,7 +245,8 @@ class _FlavorScreenState extends State<FlavorScreen> {
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, i) => Container(
-                        padding: _listItemPadding,
+                        padding: _listItemPadding
+                            .add(const EdgeInsets.only(left: 5.0)),
                         child: Text(widget.flavor.avoid[i])),
                     childCount: widget.flavor.avoid.length,
                   ),
