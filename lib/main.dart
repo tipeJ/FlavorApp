@@ -5,6 +5,7 @@ import 'package:FlavorApp/screens/favourites_screen.dart';
 import 'package:FlavorApp/screens/flavor_screen.dart';
 import 'package:FlavorApp/screens/mainlist.dart';
 import 'package:FlavorApp/screens/screens.dart';
+import 'package:FlavorApp/widgets/loading_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
@@ -76,8 +77,7 @@ class MyApp extends StatelessWidget {
                                     value: snapshot.data,
                                     builder: (context, child) =>
                                         _BottomAppBarWrapper())
-                                : const Center(
-                                    child: CircularProgressIndicator())))))
+                                : const Center(child: FlavorLauncher())))))
             // Empty container as a placeholder
             : Container());
   }
