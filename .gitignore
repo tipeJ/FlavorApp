@@ -9,6 +9,8 @@
 .buildlog/
 .history
 .svn/
+# App Signing key
+/android/key.properties
 
 # Assets
 /assets/flavordata.json
