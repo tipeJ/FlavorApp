@@ -7,6 +7,7 @@ import 'package:FlavorApp/screens/mainlist.dart';
 import 'package:FlavorApp/screens/screens.dart';
 import 'package:FlavorApp/widgets/loading_placeholder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
@@ -64,20 +65,33 @@ class MyApp extends StatelessWidget {
             ? ChangeNotifierProvider.value(
                 value: snapshot.data,
                 builder: (context, child) => Consumer<PreferencesProvider>(
-                    builder: (context, provider, child) => MaterialApp(
-                        debugShowCheckedModeBanner: false,
-                        theme: ThemeData(
-                            brightness: provider.darkMode
-                                ? Brightness.dark
-                                : Brightness.light),
-                        home: FutureBuilder<FavouriteFlavorsProvider>(
-                            future: FavouriteFlavorsProvider().initialize(),
-                            builder: (context, snapshot) => snapshot.hasData
-                                ? ChangeNotifierProvider.value(
-                                    value: snapshot.data,
-                                    builder: (context, child) =>
-                                        _BottomAppBarWrapper())
-                                : const Center(child: FlavorLauncher())))))
+                        builder: (context, provider, child) {
+                      var brightness;
+                      switch (provider.theme) {
+                        case PREFS_THEME_DARK:
+                          brightness = Brightness.dark;
+                          break;
+                        case PREFS_THEME_LIGHT:
+                          brightness = Brightness.light;
+                          break;
+                        default:
+                          brightness = SchedulerBinding
+                                  .instance.window.platformBrightness ??
+                              Brightness.light;
+                          break;
+                      }
+                      return MaterialApp(
+                          debugShowCheckedModeBanner: false,
+                          theme: ThemeData(brightness: brightness),
+                          home: FutureBuilder<FavouriteFlavorsProvider>(
+                              future: FavouriteFlavorsProvider().initialize(),
+                              builder: (context, snapshot) => snapshot.hasData
+                                  ? ChangeNotifierProvider.value(
+                                      value: snapshot.data,
+                                      builder: (context, child) =>
+                                          _BottomAppBarWrapper())
+                                  : const Center(child: FlavorLauncher())));
+                    }))
             // Empty container as a placeholder
             : Container());
   }

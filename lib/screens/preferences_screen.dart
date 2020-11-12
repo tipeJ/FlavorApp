@@ -13,15 +13,25 @@ class PreferencesScreen extends StatelessWidget {
         builder: (context, provider, child) => ListView(
           children: [
             ListTile(
-              title: const Text("Dark Mode"),
-              subtitle: const Text("Enables Dark Mode for this application"),
-              trailing: Switch.adaptive(
-                  value: provider.darkMode,
-                  onChanged: (newValue) =>
-                      provider.putSetting(PREFS_DARK_MODE, newValue)),
-              onTap: () =>
-                  provider.putSetting(PREFS_DARK_MODE, !provider.darkMode),
-            ),
+                title: const Text("Theme"),
+                subtitle: const Text("The brightness theme used by this application"),
+                trailing: DropdownButton<int>(
+                  value: provider.theme,
+                  items: const [
+                    PREFS_THEME_AUTO,
+                    PREFS_THEME_LIGHT,
+                    PREFS_THEME_DARK
+                  ].map<DropdownMenuItem<int>>((int value) =>
+                          DropdownMenuItem<int>(
+                              value: value,
+                              child: Text(
+                                  const ["Automatic", "Dark", "Light"][value])))
+                      .toList(),
+                  onChanged: (int value) =>
+                      provider.putSetting(PREFS_THEME, value),
+                ),
+                onTap: () =>
+                    provider.putSetting(PREFS_THEME, (provider.theme + 1) % 3)),
             ListTile(
               title: const Text("Default Sort"),
               subtitle: Text(provider.sortByAlpha ? "Alphabetical" : "Rating"),
