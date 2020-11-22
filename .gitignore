@@ -18,6 +18,9 @@
 # Hive DB
 /FlutterDB/
 
+# GO Build
+/go/
+
 # IntelliJ related
 *.iml
 *.ipr

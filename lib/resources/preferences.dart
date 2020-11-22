@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
-const PREFS_THEME = "preferencesDarkMode";
+const PREFS_THEME = "preferencesTheme";
 const PREFS_DEFAULT_SORT_ALPHA = "preferencesDefSortAlpha";
+
 const PREFS_THEME_AUTO = 0;
 const PREFS_THEME_DARK = 1;
 const PREFS_THEME_LIGHT = 2;
