@@ -23,8 +23,8 @@ Future features will include seasonal information and multi-flavor searching.
  ## Screenshots
 
  ![List Page](screenshots/list.png)
- ![Details Page](screenshots/list.png)
- ![List Page](screenshots/list.png)
+ ![Details Page](screenshots/details.png)
+ ![Favourites Page](screenshots/favourites.png)
 
  ## Building from source
 
