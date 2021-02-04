@@ -1,4 +1,4 @@
-# ![](assets/flavorapp.png) Flavorite
+# ![](assets/flavorapp.png | width=35) Flavorite
 
 ## What is this?
 
