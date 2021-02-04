@@ -1,8 +1,8 @@
-# FlavorApp
+# ![](assets/flavorapp.png) Flavorite
 
 ## What is this?
 
-FlavorApp is a cross-platform application designed to display tasty flavor combinations. The application contains recommendations for (almost) every flavor in existence.
+Flavorite is a cross-platform application designed to display tasty flavor combinations. The application contains recommendations for (almost) every flavor in existence.
 
 Future features will include seasonal information and multi-flavor searching.
 
@@ -16,7 +16,7 @@ Future features will include seasonal information and multi-flavor searching.
 
  ## Availablility
 
- The application is not yet available on google play. However, it can be downloaded via the release page. While dart technically supports IOS and MacOS, this application will most likely not be available for either platform any time soon, as I lack both apple hardware and the will to run OSX in a VM.
+ The application is available on Google Play, and can be found [here]https://play.google.com/store/apps/details?id=com.tipej.FlavorApp(). However, it can also be downloaded via the release page. While dart technically supports IOS and MacOS, this application will most likely not be available for either platform any time soon, as I lack both apple hardware and the will to run OSX in a VM.
 
  Currently tested and built on linux. Windows has been tested, but not built.
 
