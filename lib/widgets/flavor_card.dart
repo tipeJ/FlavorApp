@@ -1,6 +1,7 @@
 import 'package:FlavorApp/models/models.dart';
 import 'package:flutter/material.dart';
 
+/// Widget for an individual flavor, meant to be used especially in lists.
 class FlavorCard extends StatelessWidget {
   final Flavor flavor;
   final int index;

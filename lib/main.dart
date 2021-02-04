@@ -42,7 +42,7 @@ class FavouriteFlavorsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Checks wheteher the flavor exists in the favourites Box.
+  /// Checks wheteher the flavor exists in the favourites database.
   bool isSaved(int id) {
     for (var i = 0; i < _favouritesBox.length; i++) {
       if (_favouritesBox.getAt(i) == id) return true;
@@ -97,6 +97,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// The main navigation bar of the app
 class _BottomAppBarWrapper extends StatefulWidget {
   _BottomAppBarWrapper({Key key}) : super(key: key);
 

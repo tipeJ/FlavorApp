@@ -4,6 +4,8 @@
 
 FlavorApp is a cross-platform application designed to display tasty flavor combinations. The application contains recommendations for (almost) every flavor in existence.
 
+Future features will include seasonal information and multi-flavor searching.
+
 ## How do I use it?
 
 1.  Install the software by following the link to Google Play Store or by downloading the installer in the releases page.
