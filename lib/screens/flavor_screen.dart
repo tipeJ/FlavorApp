@@ -10,7 +10,7 @@ class FlavorScreen extends StatefulWidget {
   final Flavor flavor;
   final int index;
 
-  const FlavorScreen({@required this.flavor, @required this.index, Key key})
+  const FlavorScreen({required this.flavor, required this.index, Key? key})
       : super(key: key);
 
   @override
@@ -36,15 +36,15 @@ class _FlavorScreenState extends State<FlavorScreen> {
   static const _edgePadding = EdgeInsets.symmetric(horizontal: 16.0);
   static const _listItemPadding = const EdgeInsets.all(5.0);
 
-  Map<String, int> _flavors;
+  late Map<String, int> _flavors;
 
-  _FlavorsSortType _sortType;
+  late _FlavorsSortType _sortType;
 
-  bool _saved;
+  late bool _saved;
 
   @override
   void initState() {
-    _flavors = widget.flavor.ingredients;
+    _flavors = widget.flavor.ingredients ?? {};
     // Fetch the default sort type from preferences.
     if (!(_flavors.values.any((t) => t > 0))) {
       _sortType = _FlavorsSortType.None;
@@ -60,7 +60,7 @@ class _FlavorScreenState extends State<FlavorScreen> {
 
   void _toggleSortFlavors() {
     if (_sortType == _FlavorsSortType.Alphabetical) {
-      _flavors = widget.flavor.ingredients;
+      _flavors = widget.flavor.ingredients ?? {};
       _sortType = _FlavorsSortType.Rating;
     } else if (_sortType != _FlavorsSortType.None) {
       _sortByAlpha();
@@ -71,7 +71,7 @@ class _FlavorScreenState extends State<FlavorScreen> {
   void _sortByAlpha() {
     final List<String> newList = _flavors.keys.toList()..sort();
     _flavors = {};
-    newList.forEach((key) => _flavors[key] = widget.flavor.ingredients[key]);
+    newList.forEach((key) => _flavors[key] = widget.flavor.ingredients[key]!);
     _sortType = _FlavorsSortType.Alphabetical;
   }
 
@@ -132,11 +132,11 @@ class _FlavorScreenState extends State<FlavorScreen> {
                       widget.flavor.volume.isNotEmpty
                           ? VolumeDescription(widget.flavor.volume)
                           : null,
-                    ].nonNulls(),
+                    ].nonNulls() as List<Widget>,
                   ),
                 ),
               )
-            : null,
+            : const SliverToBoxAdapter(child: SizedBox()),
         SliverPadding(
             padding: _edgePadding,
             sliver: SliverList(
@@ -148,7 +148,7 @@ class _FlavorScreenState extends State<FlavorScreen> {
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       TextSpan(text: widget.flavor.function)
                     ]))
-                  : null,
+                  : const SizedBox(),
               widget.flavor.tips.isNotEmpty
                   ? Text.rich(TextSpan(children: [
                       TextSpan(
@@ -156,8 +156,8 @@ class _FlavorScreenState extends State<FlavorScreen> {
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       TextSpan(text: widget.flavor.tips)
                     ]))
-                  : null,
-            ].nonNulls()))),
+                  : const SizedBox(),
+            ]))),
         widget.flavor.ingredients.isNotEmpty
             ? SliverStickyHeader(
                 header: Container(
@@ -205,7 +205,7 @@ class _FlavorScreenState extends State<FlavorScreen> {
                   ),
                 ),
               )
-            : null,
+            : const SliverToBoxAdapter(child: SizedBox()),
         widget.flavor.flavorAffinities != null &&
                 widget.flavor.flavorAffinities.isNotEmpty
             ? SliverStickyHeader(
@@ -229,7 +229,7 @@ class _FlavorScreenState extends State<FlavorScreen> {
                   ),
                 ),
               )
-            : null,
+            : const SliverToBoxAdapter(child: SizedBox()),
         widget.flavor.avoid != null && widget.flavor.avoid.isNotEmpty
             ? SliverStickyHeader(
                 header: Container(
@@ -252,8 +252,8 @@ class _FlavorScreenState extends State<FlavorScreen> {
                   ),
                 ),
               )
-            : null
-      ].nonNulls(),
+            : const SliverToBoxAdapter(child: SizedBox()),
+      ],
     ));
   }
 }

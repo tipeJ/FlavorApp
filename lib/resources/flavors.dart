@@ -7,7 +7,7 @@ import 'package:hive/hive.dart';
 
 class FlavorRepository {
   static final FlavorRepository _singleton = FlavorRepository._internal();
-  Box _savedRepo;
+  late Box _savedRepo;
 
   factory FlavorRepository() {
     return _singleton;
@@ -15,7 +15,7 @@ class FlavorRepository {
 
   FlavorRepository._internal();
 
-  List<Flavor> _flavors;
+  late List<Flavor> _flavors;
 
   Future<bool> initialize() async {
     _savedRepo = await Hive.openBox("savedFlavors");
@@ -34,13 +34,11 @@ class FlavorRepository {
 
   Future<List<Flavor>> filterFlavors(String query) {
     List<Flavor> allFlavors = _flavors;
-    return compute(_filterFlavors, {
-      'flavors' : allFlavors,
-      'query'   : query
-    });
+    return compute(_filterFlavors, {'flavors': allFlavors, 'query': query});
   }
 
-  List<Flavor> getFlavorsByIds(List<int> ids) => ids.map<Flavor>((i) => _flavors[i]).toList();
+  List<Flavor> getFlavorsByIds(List<int> ids) =>
+      ids.map<Flavor>((i) => _flavors[i]).toList();
 
   List<int> getSavedFlavorsIDs() {
     return _savedRepo.values.toList().cast<int>();
@@ -49,15 +47,19 @@ class FlavorRepository {
   Flavor getFlavor(int id) => _flavors[id];
 }
 
-List<Flavor> _parseFlavors(String jsonString){
+List<Flavor> _parseFlavors(String jsonString) {
   final List<Flavor> list = [];
   final data = json.decode(jsonString);
-  data['Ingredients'].forEach((ingredient) => list.add(Flavor.fromJson(ingredient)));
+  data['Ingredients']
+      .forEach((ingredient) => list.add(Flavor.fromJson(ingredient)));
   return list;
 }
 
 List<Flavor> _filterFlavors(Map<String, dynamic> args) {
   List<Flavor> flavors = args['flavors'];
   String query = args['query'];
-  return flavors.where((element) => element.name.toLowerCase().contains(query.toLowerCase())).toList();
+  return flavors
+      .where(
+          (element) => element.name.toLowerCase().contains(query.toLowerCase()))
+      .toList();
 }

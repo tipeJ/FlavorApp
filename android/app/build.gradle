@@ -44,7 +44,7 @@ android {
     defaultConfig {
         applicationId "com.tipej.FlavorApp"
         minSdkVersion 16
-        targetSdkVersion 29
+        targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

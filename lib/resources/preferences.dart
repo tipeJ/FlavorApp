@@ -12,7 +12,7 @@ const PREFS_THEME_DARK = 1;
 const PREFS_THEME_LIGHT = 2;
 
 class PreferencesProvider extends ChangeNotifier {
-  Box _box;
+  late Box _box;
 
   int get theme => _box.get(PREFS_THEME, defaultValue: PREFS_THEME_AUTO);
 

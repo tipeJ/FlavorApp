@@ -17,7 +17,7 @@ void main() {
 
 class FavouriteFlavorsProvider extends ChangeNotifier {
   static FlavorRepository _repository = FlavorRepository();
-  Box _favouritesBox;
+  late Box _favouritesBox;
 
   Future<FavouriteFlavorsProvider> initialize() async {
     _favouritesBox = await Hive.openBox("favouriteFlavors");
@@ -99,7 +99,7 @@ class MyApp extends StatelessWidget {
 
 /// The main navigation bar of the app
 class _BottomAppBarWrapper extends StatefulWidget {
-  _BottomAppBarWrapper({Key key}) : super(key: key);
+  _BottomAppBarWrapper({Key? key}) : super(key: key);
 
   @override
   __BottomAppBarWrapperState createState() => __BottomAppBarWrapperState();
@@ -113,9 +113,9 @@ class __BottomAppBarWrapperState extends State<_BottomAppBarWrapper> {
 
   Future<bool> _didPopRoute() async {
     if (_currentPage == 1) {
-      _flavorsListScreen.currentState.maybePop();
+      _flavorsListScreen.currentState?.maybePop();
     } else if (_currentPage == 0) {
-      _savedFlavorsListScreen.currentState.maybePop();
+      _savedFlavorsListScreen.currentState?.maybePop();
     }
     return Future.value(false);
   }
@@ -153,9 +153,9 @@ class __BottomAppBarWrapperState extends State<_BottomAppBarWrapper> {
             onTap: (i) {
               if (i == _currentPage && i == 0) {
                 _savedFlavorsListScreen.currentState
-                    .popUntil((route) => route.isFirst);
+                    ?.popUntil((route) => route.isFirst);
               } else if (i == _currentPage && i == 1) {
-                _flavorsListScreen.currentState.maybePop();
+                _flavorsListScreen.currentState?.maybePop();
               } else {
                 setState(() {
                   _currentPage = i;
@@ -171,7 +171,7 @@ class RouteGenerator {
   static Route<dynamic> generateR(RouteSettings settings) {
     switch (settings.name) {
       case 'FlavorScreen':
-        Map<String, dynamic> args = settings.arguments;
+        Map<String, dynamic> args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
             builder: (_) =>
                 FlavorScreen(flavor: args['flavor'], index: args['index']));

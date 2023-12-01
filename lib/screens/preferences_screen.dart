@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PreferencesScreen extends StatelessWidget {
-  const PreferencesScreen({Key key}) : super(key: key);
+  const PreferencesScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,20 +14,22 @@ class PreferencesScreen extends StatelessWidget {
           children: [
             ListTile(
                 title: const Text("Theme"),
-                subtitle: const Text("The brightness theme used by this application"),
+                subtitle:
+                    const Text("The brightness theme used by this application"),
                 trailing: DropdownButton<int>(
                   value: provider.theme,
                   items: const [
                     PREFS_THEME_AUTO,
                     PREFS_THEME_LIGHT,
                     PREFS_THEME_DARK
-                  ].map<DropdownMenuItem<int>>((int value) =>
+                  ]
+                      .map<DropdownMenuItem<int>>((int value) =>
                           DropdownMenuItem<int>(
                               value: value,
                               child: Text(
                                   const ["Automatic", "Dark", "Light"][value])))
                       .toList(),
-                  onChanged: (int value) =>
+                  onChanged: (int? value) =>
                       provider.putSetting(PREFS_THEME, value),
                 ),
                 onTap: () =>

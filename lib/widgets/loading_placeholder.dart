@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoadingFlavorPlaceholder extends StatelessWidget {
-  const LoadingFlavorPlaceholder({Key key}) : super(key: key);
+  const LoadingFlavorPlaceholder({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class LoadingFlavorPlaceholder extends StatelessWidget {
 }
 
 class FlavorLauncher extends StatefulWidget {
-  const FlavorLauncher({Key key}) : super(key: key);
+  const FlavorLauncher({Key? key}) : super(key: key);
 
   @override
   _FlavorLauncherState createState() => _FlavorLauncherState();
@@ -32,12 +32,11 @@ class _FlavorLauncherState extends State<FlavorLauncher>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).canvasColor,
+        color: Theme.of(context).canvasColor,
         child: AnimatedOpacity(
-          duration: _duration,
-          curve: Curves.easeOut,
-          opacity: _anv,
-          child: LoadingFlavorPlaceholder()
-        ));
+            duration: _duration,
+            curve: Curves.easeOut,
+            opacity: _anv,
+            child: LoadingFlavorPlaceholder()));
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'screens.dart';
 
 class HelpScreen extends StatelessWidget {
-  const HelpScreen({Key key}) : super(key: key);
+  const HelpScreen({Key? key}) : super(key: key);
   static const _infoTiles = [
     "This is a recommended flavor",
     "This is a frequently recommended flavor",
@@ -20,7 +20,7 @@ class HelpScreen extends StatelessWidget {
               builder: (_) => IconButton(
                   icon: const Icon(Icons.bookmark),
                   onPressed: () {
-                    Scaffold.of(_).showSnackBar(const SnackBar(
+                    ScaffoldMessenger.of(_).showSnackBar(const SnackBar(
                         content: Text("Flavor added to favourites!")));
                   }))
         ],
